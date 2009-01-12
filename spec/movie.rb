@@ -1,6 +1,6 @@
 describe "Allocine Movie (Star Trek - 4854)" do
   
-  before(:each) { @movie = AllocineMovie.new('4854') }
+  before(:each) { @movie = Allocine::Movie.new('4854') }
   
   it 'should have a title' do
     @movie.title.should == "Star Trek : Premier contact"

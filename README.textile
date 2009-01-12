@@ -3,14 +3,21 @@ h2. Allocine
 Allocine consiste en trois classes.
 
 * @Allocine@ : permet de rechercher des films/séries,
-* @AllocineMovie@ qui permet de récupérer toutes les informations sur un film,
-* @AllocineShow@ qui permet de récupérer toutes les information sur les séries.
+* @Allocine::Movie@ qui permet de récupérer toutes les informations sur un film,
+* @Allocine::Show@ qui permet de récupérer toutes les information sur les séries.
 
 Une documentation (et un code) plus propre arrive prochainement.
 
 Bug reports : http://webs.lighthouseapp.com/projects/18095-allocine
 
 Mis a disposition sous licence MIT. (c) 2008 Jordan Bracco <jordan@lifeisdead.net>
+
+h3. Installation
+
+<pre>
+  $ gem sources -a http://gems.github.com
+  $ sudo gem install webs-allocine
+</pre>
 
 h3. Recherche
 
@@ -37,7 +44,7 @@ h3. Récupération des informations d'un film/série
 h4. Film
 
 <pre>
-  >> movie = AllocineMovie.new('13031')
+  >> movie = Allocine::Movie.new('13031')
   => #<AllocineMovie:0x11fb250 ....>
   >> movie.title
   => "Plan 9"
@@ -62,7 +69,7 @@ h4. Film
 h4. Série
 
 <pre>
-  >> show = AllocineShow.new('182')
+  >> show = Allocine::Show.new('182')
   => #<AllocineShow:0x1255908 ...>
   >> show.title
   => "X-Files : Aux fronti\303\250res du r\303\251el"

@@ -1,39 +1,11 @@
-class Allocine  
-  def self.find_movie(search)
-    search = search.gsub(' ', '+')
-    str = open(MOVIE_SEARCH_URL % search).read.to_s
-    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
-    films = {}
-    while data =~ /<a href="\/film\/fichefilm_gen_cfilm=(\d+).html" class="link(\d+)">(.*?)<\/a>/i
-      id, klass, name = $1, $2, $3
-      data.gsub!("<a href=\"/film/fichefilm_gen_cfilm=#{id}.html\" class=\"link#{klass}\">#{name}</a>", "")
-      name.gsub!(/<(.+?)>/,'')
-      films[id] = name
-    end
-    films
-  end
-  
-  def self.find_show(search)
-    search = search.gsub(' ', '+')
-    str = open(SHOW_SEARCH_URL % search).read.to_s
-    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
-    shows = {}
-    while data =~ /<a href="\/series\/ficheserie_gen_cserie=(\d+).html" class="link(\d+)">(.*?)<\/a>/i
-      id, klass, name = $1, $2, $3
-      data.gsub!("<a href=\"/series/ficheserie_gen_cserie=#{id}.html\" class=\"link#{klass}\">#{name}</a>", "")
-      name.gsub!(/<(.+?)>/,'')
-      shows[id] = name
-    end
-    shows
-  end
-  
-  def self.lucky_movie(search)
-    results = self.find_movie(search)
-    AllocineMovie.new(results.keys.first)
-  end
-  
-  def self.lucky_show(search)
-    results = self.find_show(search)
-    AllocineShow.new(results.keys.first)
-  end
-end
+$:.unshift File.dirname(__FILE__)
+require 'rubygems'
+require 'open-uri'
+require 'iconv'
+require 'allocine/allocine'
+require 'allocine/movie'
+require 'allocine/show'
+MOVIE_SEARCH_URL = "http://www.allocine.fr/recherche/?motcle=%s&rub=1"
+MOVIE_DETAIL_URL = "http://www.allocine.fr/film/fichefilm_gen_cfilm=%s.html"
+SHOW_SEARCH_URL = "http://www.allocine.fr/recherche/?motcle=%s&rub=6"
+SHOW_DETAIL_URL = "http://www.allocine.fr/series/ficheserie_gen_cserie=%s.html"
