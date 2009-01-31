@@ -4,17 +4,17 @@ class Movie
 
   def initialize(id, debug=false)
     regexps = {
-      :title => '<title>(.*?)<\/title>',
-      :directors => '<h4>Réalisé par <a .*?>(.*?)<\/a><\/h4>',
-      :nat => '<h4>Film (.*?).&nbsp;</h4>',
-      :genres => '<h4>Genre : (.*?)</h4>',
-      :out_date => '<h4>Date de sortie : <b>(.*?)</b>',
-      :duree => '<h4>Dur\ée : (.*?).&nbsp;</h4>',
-      :production_date => '<h4>Année de production : (.*?)</h4>',
-      :original_title => '<h4>Titre original : <i>(.*?)</i></h4>',
-      :actors => '<h4>Avec (.*?) &nbsp;&nbsp;',
+      :title => '<h1 class="TitleFilm">(.*?)<\/h1>',
+      :directors => '<h3 class="SpProse">Réalisé par <a .*?>(.*?)<\/a><\/h3>',
+      :nat => '<h3 class="SpProse">Film (.*?).&nbsp;</h3>',
+      :genres => '<h3 class="SpProse">Genre : (.*?)</h3>',
+      :out_date => '<h3 class="SpProse">Date de sortie : <b>(.*?)</b>',
+      :duree => '<h3 class="SpProse">Dur\ée : (.*?).&nbsp;</h3>',
+      :production_date => '<h3 class="SpProse">Année de production : (.*?)</h3>',
+      :original_title => '<h3 class="SpProse">Titre original : <i>(.*?)</i></h3>',
+      :actors => '<h3 class="SpProse">Avec (.*?) &nbsp;&nbsp;',
       :synopsis => '<td valign="top" style="padding:10 0 0 0"><div align="justify"><h4>(.*?)</h4>',
-      :image => '<td valign="top" width="120".*?img src="(.*?)" border="0" alt="" class="affichette" />',
+      :image => '<td valign="top" width="120".*?img src="(.*?)" border="0" alt=".*?" class="affichette" />',
       :interdit => '<h4 style="color: #D20000;">Interdit(.*?)</h4>'
     }
     str = open(MOVIE_DETAIL_URL % id).read.to_s
@@ -24,6 +24,9 @@ class Movie
       r = data.scan Regexp.new(reg[1], Regexp::MULTILINE)
       r = r.first.to_s.strip
       r.gsub!(/<.*?>/, '')
+      if r[0..0] == " "
+        r = r.reverse.chop.reverse # that's a little bit ugly, but the only simple way i found to remove the first space in the out date
+      end
       self.instance_variable_set("@#{reg[0]}", r)
       print "#{r}\n" if debug
     end
