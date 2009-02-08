@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 disable :reload
+gem 'allocine'
 require 'allocine'
 
 get '/' do
@@ -31,17 +32,17 @@ get '/parts/movie/:search' do
   if @results.empty?
     "<p>Aucuns films ne correspondent à votre recherche."
   else
-    haml :results
+    haml :results, :layout => false
   end
 end
 
 get '/parts/show/:search' do
-  @results = Allocine::Movie.find(params[:search])
+  @results = Allocine::Show.find(params[:search])
   @type = "show"
   if @results.empty?
     "<p>Aucunes séries ne correspondent à votre recherche."
   else
-    haml :results
+    haml :results, :layout => false
   end
 end
 
@@ -86,7 +87,7 @@ __END__
 
 @@ results
 %ul
-  for result in @results
+  - @results.each do |result|
     %li
       %a{:href=>"/#{@type}/#{result[0]}"}= result[1]
 
