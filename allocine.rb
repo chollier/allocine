@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'sinatra'
-require '/Users/webs/dev/allocine_gem/lib/allocine.rb'
+disable :reload
+require 'allocine'
 
 get '/' do
+  header 'Content-Type' => 'text/html; charset=utf-8'
   unless params[:q] && !params[:q].empty?
     @title = "Allocine"
     haml :index
