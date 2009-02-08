@@ -1,7 +1,26 @@
 module Allocine
 class Show
   attr_accessor :title, :created_by, :producters, :nat, :genres, :duree, :original_title, :actors, :synopsis, :image
-
+  
+  def self.find(search)
+    search.gsub!(' ', '+')
+    str = open(SHOW_SEARCH_URL % search).read.to_s
+    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
+    shows = {}
+    while data =~ /<a href="\/series\/ficheserie_gen_cserie=(\d+).html" class="link(\d+)">(.*?)<\/a>/i
+      id, klass, name = $1, $2, $3
+      data.gsub!("<a href=\"/series/ficheserie_gen_cserie=#{id}.html\" class=\"link#{klass}\">#{name}</a>", "")
+      name.gsub!(/<(.+?)>/,'')
+      shows[id] = name
+    end
+    shows
+  end
+  
+  def self.lucky_find(search)
+    results = find(search)
+    new(results.keys.first)
+  end
+  
   def initialize(id, debug=false)
     regexps = {
       :title => '<title>(.*?)<\/title>',

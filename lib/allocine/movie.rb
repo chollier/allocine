@@ -1,7 +1,26 @@
 module Allocine
 class Movie
   attr_accessor :title, :directors, :nat, :genres, :out_date, :duree, :production_date, :original_title, :actors, :synopsis, :image, :interdit
-
+  
+  def self.find(search)
+    search.gsub!(' ', '+')
+    str = open(MOVIE_SEARCH_URL % search).read.to_s
+    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
+    movies = {}
+    while data =~ /<a href="\/film\/fichefilm_gen_cfilm=(\d+).html" class="link(\d+)">(.*?)<\/a>/i
+      id, klass, name = $1, $2, $3
+      data.gsub!("<a href=\"/film/fichefilm_gen_cfilm=#{id}.html\" class=\"link#{klass}\">#{name}</a>", "")
+      name.gsub!(/<(.+?)>/,'')
+      movies[id] = name
+    end
+    movies
+  end
+  
+  def self.lucky_find(search)
+    results = find(search)
+    new(results.keys.first)
+  end
+  
   def initialize(id, debug=false)
     regexps = {
       :title => '<h1 class="TitleFilm">(.*?)<\/h1>',

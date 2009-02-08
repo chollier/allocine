@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name     = "allocine"
-  s.version  = "0.2.1"
-  s.date     = "2008-12-30"
+  s.version  = "0.3.0"
+  s.date     = "2009-02-08"
   s.summary  = "Allocine.fr parser"
   s.email    = "jordan@lifeisdead.net"
   s.homepage = "http://github.com/webs/allocine"
