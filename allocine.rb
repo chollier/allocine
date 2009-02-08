@@ -1,10 +1,6 @@
 require 'rubygems'
 require 'sinatra'
-#require '../allocine/lib/allocine'
-
-#configure do
-  #set :haml, :format => :html5
-#end
+require '/Users/webs/dev/allocine_gem/lib/allocine.rb'
 
 get '/' do
   unless params[:q] && !params[:q].empty?
@@ -28,11 +24,23 @@ get '/main.css' do
 end
 
 get '/parts/movie/:search' do
-  "hai2u movie"
+  @results = Allocine::Movie.find(params[:search])
+  @type = "movie"
+  if @results.empty?
+    "<p>Aucuns films ne correspondent à votre recherche."
+  else
+    haml :results
+  end
 end
 
 get '/parts/show/:search' do
-  "hai2u show"
+  @results = Allocine::Movie.find(params[:search])
+  @type = "show"
+  if @results.empty?
+    "<p>Aucunes séries ne correspondent à votre recherche."
+  else
+    haml :results
+  end
 end
 
 use_in_file_templates!
@@ -73,6 +81,12 @@ __END__
 %h3 Séries
 %div#show_search
   Chargement des données en cours...
+
+@@ results
+%ul
+  for result in @results
+    %li
+      %a{:href=>"/#{@type}/#{result[0]}"}= result[1]
 
 @@ stylesheet
 html
