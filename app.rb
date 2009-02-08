@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-disable :reload
 gem 'allocine'
 require 'allocine'
 
@@ -13,12 +12,19 @@ get '/' do
     @title = "Allocine &mdash; Recherche '" + params[:q] + "'"
     @script = "<script>
       $(document).ready(function(){
-        $('#movie_search').load('/parts/movie/#{params[:q]}');
-        $('#show_search').load('/parts/show/#{params[:q]}');
+        $('#movie_search').load('/parts/movie/#{params[:q].gsub(/\W/, '+')}');
+        $('#show_search').load('/parts/show/#{params[:q].gsub(/\W/, '+')}');
       });
       </script>"
     haml :search
   end
+end
+
+get '/movie/:id' do
+  header 'Content-Type' => 'text/html; charset=utf-8'
+  @movie = Allocine::Movie.new(params[:id])
+  @title = @movie.title
+  haml :movie
 end
 
 get '/main.css' do
@@ -91,6 +97,45 @@ __END__
     %li
       %a{:href=>"/#{@type}/#{result[0]}"}= result[1]
 
+@@ movie
+- if @movie.image
+  %span.picture
+    %img{:src => @movie.image}
+
+- if @movie.directors
+  %strong Producteurs:
+  = @movie.directors
+  %br
+- if @movie.nat
+  Film
+  = @movie.nat
+  %br
+- if @movie.genres
+  %strong Genres:
+  = @movie.genres
+  %br
+- if @movie.out_date
+  %strong Date de sortie
+  = @movie.out_date
+  %br
+- if @movie.duree
+  %strong Durée
+  = @movie.duree
+  %br
+- if @movie.production_date
+  %strong Date de production
+  = @movie.production_date
+  %br
+- if @movie.original_title
+  %strong Titre original
+  = @movie.original_title
+  %br
+- if @movie.actors
+  %strong Acteurs
+  = @movie.actors
+  %br
+- if @movie.synopsis
+  %p= @movie.synopsis
 @@ stylesheet
 html
   :color #000
@@ -129,6 +174,8 @@ a:hover
 
 #body
   :color #000
+  :padding-top 10px
+  :padding-bottom 10px
 
 #footer
   :text-align center
@@ -143,3 +190,7 @@ h2
 input
   :font-size 25px
   :text-align center
+
+.picture 
+  :float left
+  :padding-right 5px
