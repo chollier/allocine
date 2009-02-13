@@ -7,6 +7,7 @@ get '/' do
   header 'Content-Type' => 'text/html; charset=utf-8'
   unless params[:q] && !params[:q].empty?
     @title = "Allocine"
+    @hide_header = true
     haml :index
   else
     @title = "Allocine &mdash; Recherche '" + params[:q] + "'"
@@ -25,6 +26,13 @@ get '/movie/:id' do
   @movie = Allocine::Movie.new(params[:id])
   @title = @movie.title
   haml :movie
+end
+
+get '/show/:id' do
+  header 'Content-Type' => 'text/html; charset=utf-8'
+  @show = Allocine::Show.new(params[:id])
+  @title = @show.title
+  haml :show
 end
 
 get '/main.css' do
@@ -65,8 +73,9 @@ __END__
     = @script if @script
   %body
     #container
-      #head
-        %h1= @title
+      - unless @hide_header
+        #head
+          %h1= @title
       #body
         = yield
       #footer
@@ -96,6 +105,43 @@ __END__
   - @results.each do |result|
     %li
       %a{:href=>"/#{@type}/#{result[0]}"}= result[1]
+
+@@ show
+- if @show.image
+  %span.picture
+    %img{:src => @show.image}
+
+- if @show.created_by
+  %strong Créée par
+  = @show.created_by
+  %br
+- if @show.producters
+  %strong Producteurs
+  = @show.producters
+  %br
+- if @show.nat
+  %strong Nationalité
+  = @show.nat
+  %br
+- if @show.genres
+  %strong Genres
+  = @show.genres
+  %br
+- if @show.duree
+  %strong Durée d'un épîsode
+  = @show.duree
+  %br
+- if @show.original_title
+  %strong Titre Original
+  = @show.original_title
+  %br
+- if @show.actors
+  %strong Acteurs
+  = @show.actors
+  %br
+- if @show.synopsis
+  %br
+  = @show.synopsis
 
 @@ movie
 - if @movie.image
@@ -186,9 +232,10 @@ a:hover
 
 h2
   :text-align center
+  :font-size 25px
 
 input
-  :font-size 25px
+  :font-size 30px
   :text-align center
 
 .picture 
