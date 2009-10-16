@@ -5,13 +5,17 @@ class Movie
   def self.find(search)
     search.gsub!(' ', '+')
     str = open(MOVIE_SEARCH_URL % search).read.to_s
-    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
     movies = {}
-    while data =~ /<a href="\/film\/fichefilm_gen_cfilm=(\d+).html" class="link(\d+)">(.*?)<\/a>/i
-      id, klass, name = $1, $2, $3
-      data.gsub!("<a href=\"/film/fichefilm_gen_cfilm=#{id}.html\" class=\"link#{klass}\">#{name}</a>", "")
-      name.gsub!(/<(.+?)>/,'')
-      movies[id] = name
+    while str =~ /<a href='\/film\/fichefilm_gen_cfilm=(\d+).html'>(.*?)<\/a>/mi
+      id, name = $1, $2
+      unless name =~ /<img(.*?)/
+        str.gsub!("<a href=\'/film/fichefilm_gen_cfilm=#{id}.html\'>#{name}</a>", "")
+        name.gsub!(/<(.+?)>/,'')
+        name.strip!
+        movies[id] = name
+      else
+        str.gsub!("<a href=\'/film/fichefilm_gen_cfilm=#{id}.html\'>#{name}</a>", "")
+      end
     end
     movies
   end
@@ -43,9 +47,7 @@ class Movie
       r = data.scan Regexp.new(reg[1], Regexp::MULTILINE)
       r = r.first.to_s.strip
       r.gsub!(/<.*?>/, '')
-      if r[0..0] == " "
-        r = r.reverse.chop.reverse # that's a little bit ugly, but the only simple way i found to remove the first space in the out date
-      end
+      r.strip!
       self.instance_variable_set("@#{reg[0]}", r)
       print "#{r}\n" if debug
     end

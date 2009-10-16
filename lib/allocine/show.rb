@@ -5,14 +5,19 @@ class Show
   def self.find(search)
     search.gsub!(' ', '+')
     str = open(SHOW_SEARCH_URL % search).read.to_s
-    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
     shows = {}
-    while data =~ /<a href="\/series\/ficheserie_gen_cserie=(\d+).html" class="link(\d+)">(.*?)<\/a>/i
-      id, klass, name = $1, $2, $3
-      data.gsub!("<a href=\"/series/ficheserie_gen_cserie=#{id}.html\" class=\"link#{klass}\">#{name}</a>", "")
-      name.gsub!(/<(.+?)>/,'')
-      shows[id] = name
+    while str =~ /<a href='\/series\/ficheserie_gen_cserie=(\d+).html'>(.*?)<\/a>/mi
+      id, name = $1, $2
+      unless name =~ /<img(.*?)/
+        str.gsub!("<a href=\'/series/ficheserie_gen_cserie=#{id}.html\'>#{name}</a>", "")
+        name.gsub!(/<(.+?)>/,'')
+        name.strip!
+        shows[id] = name
+      else
+        str.gsub!("<a href=\'/series/ficheserie_gen_cserie=#{id}.html\'>#{name}</a>", "")
+      end
     end
+    
     shows
   end
   

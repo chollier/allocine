@@ -1,10 +1,10 @@
 describe "Allocine" do
   it "find movie" do
-    Allocine.find_movie('Plan 9').should == {"13031"=>"Plan 9", "136668"=>"Plan 9 from Outer Space"}
+    Allocine.find_movie('Plan 9').size.should == 21
   end
   
   it "find show" do
-    Allocine.find_show('XFiles').should == {"182"=>"X-Files : Aux fronti\303\250res du r\303\251el"}
+    Allocine.find_show('XFiles').should == {"182"=>"X-Files : Aux fronti\303\250res du r\303\251el", "223"=>"Lost"}
   end
   
   it "lucky movie" do
