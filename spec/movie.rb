@@ -19,7 +19,7 @@ describe "Allocine Movie (Star Trek - 4854)" do
   end
   
   it 'should have a picture' do
-    @movie.image.should == "http://a69.g.akamai.net/n/69/10688/v1/img5.allocine.fr/acmedia/medias/nmedia/18/66/82/23/18957530.jpg"
+    @movie.image.should == "http://images.allocine.fr/r_160_214/commons/emptymedia/AffichetteAllocine.gif"
   end
   
   it 'should have a genre' do
@@ -30,8 +30,8 @@ describe "Allocine Movie (Star Trek - 4854)" do
     @movie.directors.should == "Jonathan Frakes"
   end
   
-  it 'should have a duree (lolwtffrench)' do
-    @movie.duree.should == "1h 52min"
+  it 'should have a duration' do
+    @movie.duree.should == "1h52 min"
   end
   
   it 'should have actors' do
@@ -39,7 +39,7 @@ describe "Allocine Movie (Star Trek - 4854)" do
   end
   
   it 'should have an out date' do
-    @movie.out_date.should == "05 Mars 1997"
+    @movie.out_date.should == "5 mars 1997"
   end
   
   it 'should have a production date' do
