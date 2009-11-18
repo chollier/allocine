@@ -4,7 +4,7 @@ class Show
   
   def self.find(search)
     search.gsub!(' ', '+')
-    str = open(SHOW_SEARCH_URL % search).read.to_s
+    str = Allocine::Web.download(SHOW_SEARCH_URL % search)
     shows = {}
     while str =~ /<a href='\/series\/ficheserie_gen_cserie=(\d+).html'>(.*?)<\/a>/mi
       id, name = $1, $2
@@ -23,10 +23,11 @@ class Show
   
   def self.lucky_find(search)
     results = find(search)
-    new(results.keys.first)
+    new(results.first)
   end
   
   def initialize(id, debug=false)
+    #TODO : New Regex for new version.    
     regexps = {
       :title => '<title>(.*?)<\/title>',
       :created_by => '<h4>Série créée par <a .*?>(.*?)</a>', 
@@ -39,8 +40,7 @@ class Show
       :synopsis => '<h5><span style=\'font-weight:bold\'>Synopsis</span>&nbsp;&nbsp;&nbsp;.*?<br />(.*?)</h5>',
       :image => '<td><div id=\'divM\' .*?><img src=\'(.*?)\' style=\'border:1px solid black;.*?>',
     }
-    str = open(SHOW_DETAIL_URL % id).read.to_s
-    data = Iconv.conv('UTF-8', 'ISO-8859-1', str)
+    data = Allocine::Web.download(SHOW_DETAIL_URL % id).gsub(/\r|\n|\t/,"")
     regexps.each do |reg|
       print "#{reg[0]}: " if debug
       r = data.scan Regexp.new(reg[1], Regexp::MULTILINE)

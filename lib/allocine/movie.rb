@@ -1,46 +1,61 @@
 module Allocine
 class Movie
-  attr_accessor :title, :directors, :nat, :genres, :out_date, :duree, :production_date, :original_title, :actors, :synopsis, :image, :interdit
+  attr_accessor :title, :directors, :trailer, :press_rate, :nat, :genres, :out_date, :duree, :production_date, :original_title, :actors, :synopsis, :image, :interdit
   
   def self.find(search)
-    search.gsub!(' ', '+')
-    str = open(MOVIE_SEARCH_URL % search).read.to_s
-    movies = {}
-    while str =~ /<a href='\/film\/fichefilm_gen_cfilm=(\d+).html'>(.*?)<\/a>/mi
+    search = ActiveSupport::Multibyte.proxy_class.new(search.to_s).mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n,'').downcase.to_s.
+      downcase.
+      gsub(/[\W]/u, ' ').
+      gsub(/\s[a-z]{1}\s/, ' ').
+      strip.
+      gsub(/-\z/u, '').
+      gsub(' ', '+').
+      gsub('2nd', '2').
+      to_s
+    data = Allocine::Web.download(MOVIE_SEARCH_URL % search).gsub(/\r|\n|\t|\s{2,}/,"")
+    movies = Array.new
+    while data =~ /<a href='\/film\/fichefilm_gen_cfilm=(\d+).html'><imgsrc='.*?'alt='(.*?)' \/><\/a>/i
       id, name = $1, $2
-      unless name =~ /<img(.*?)/
-        str.gsub!("<a href=\'/film/fichefilm_gen_cfilm=#{id}.html\'>#{name}</a>", "")
-        name.gsub!(/<(.+?)>/,'')
-        name.strip!
-        movies[id] = name
-      else
-        str.gsub!("<a href=\'/film/fichefilm_gen_cfilm=#{id}.html\'>#{name}</a>", "")
-      end
+      data.gsub!("<a href='/film/fichefilm_gen_cfilm=#{id}.html'>", "")
+      name.gsub!(/<(.+?)>/,'')
+      movies << [id, name]
     end
-    movies
+    movies = searchGoogle(search, movies.collect{|m| m[0]}) + movies
+    
+    return movies
+  end
+  
+  def self.searchGoogle(search, movies)
+    data = Allocine::Web.download("http://www.google.fr/search?hl=fr&q=site:allocine.fr+#{search}") #.gsub(/\r|\n|\t/,"")
+    matches = Array.new
+    data.scan(/fichefilm_gen_cfilm=([0-9]*).html/) do |m| 
+      matches << [m.first, "#{search} - Found by Google"] unless movies.include? m.first
+    end
+    return matches.uniq
   end
   
   def self.lucky_find(search)
     results = find(search)
-    new(results.keys.first)
+    new(results.first)
   end
   
   def initialize(id, debug=false)
     regexps = {
-      :title => '<div class="titlebar">.*<h1>(.*?)<\/h1>.*</div>',
-      :directors => 'Réalisé par <span class="bold"><a .*?>(.*?)<\/a>',
-      :nat => 'Long-métrage (.*?)\.',
-      :genres => 'Genre :.*?(.*?)<br/>',
-      :out_date => 'Date de sortie cinéma :.*?<span class="bold">(.*?)</span>',
-      :duree => 'Durée :.*?(.*?)\.',
-      :production_date => 'Année de production :.*?(.*?)<br/><br />',
-      :original_title => 'Titre original : <span class="purehtml"><em>(.*?)</em></span>',
-      :actors => 'Avec (.*?)&nbsp;&nbsp;',
-      :synopsis => '<p class="">.*?<span class="bold">Synopsis :</span>(.*?)</p>',
-      :image => '<a href="/film/.*?/affiches/">.*?<img src=\'(.*?)\'.*?alt=".*?".*?title=".*?".*?/>',
-      :interdit => '<h4 style="color: #D20000;">Interdit(.*?)</h4>'
+      :title => '<div class="titlebar"><h1>(.*?)<\/h1>',
+      :directors => 'Réalisé par <span .*?><a .*?>(.*?)<\/a><\/span>',
+      :nat => 'Long-métrage(.*?)\.',
+      :genres => 'Genre : (.*?)<br\/>',
+      :out_date => 'Date de sortie cinéma : <span .*?><a .*?>(.*?)<\/a><\/span>',
+      :duree => 'Durée :(.*?) min',
+      :production_date => 'Année de production : <a .*?>(.*?)<\/a><br \/>',
+      :original_title => 'Titre original : <span .*?><em>(.*?)<\/em><\/span>',
+      :actors => 'Avec (.*?), <a class=',
+      :synopsis => '<p><span class="bold">Synopsis : </span>(.*?)</p>',
+      :image => '<div class="poster"><em class="imagecontainer"><a .*?><img src=\'(.*?)\'alt=".*?"title=".*?"\/><img .*?><\/a><\/em>',
+      :press_rate => '<p class="withstars"><a href=\'/film/revuedepresse_gen_cfilm=[0-9]*?.html\'><img .*? /></a><span class="moreinfo">\((.*?)\)</span></p></div>',
+      :trailer => "<li class=\"\"><a href=\"\/video\/player_gen_cmedia=(.*?)&cfilm=#{id}\.html\">Bandes-annonces<\/a><\/li>"
     }
-    data = open(MOVIE_DETAIL_URL % id).read.to_s
+    data = Allocine::Web.download(MOVIE_DETAIL_URL % id).gsub(/\r|\n|\t/,"")
     regexps.each do |reg|
       print "#{reg[0]}: " if debug
       r = data.scan Regexp.new(reg[1], Regexp::MULTILINE)
