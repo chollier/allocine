@@ -1,8 +1,5 @@
 $:.unshift File.dirname(__FILE__)
 
-require 'rubygems'
-# require 'open-uri' # Now use CURB
-# require 'iconv'   
 require 'activesupport'
 require 'curb'
 require 'zlib'
