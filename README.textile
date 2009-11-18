@@ -8,15 +8,15 @@ Allocine consiste en trois classes.
 
 Une documentation (et un code) plus propre arrive prochainement.
 
-Bug reports : http://webs.lighthouseapp.com/projects/18095-allocine
+Bug reports : http://github.com/Florian95/allocine/issues
 
 Mis a disposition sous licence MIT. (c) 2008 Jordan Bracco <jordan@lifeisdead.net>
+Mise a jour par Florian Lamache pour être compatible avec la nouvelle version du site de Allocine.
 
 h3. Installation
 
 <pre>
-  $ gem sources -a http://gems.github.com
-  $ sudo gem install webs-allocine
+  $ git clone git://github.com/Florian95/allocine.git
 </pre>
 
 h3. Recherche
@@ -29,14 +29,14 @@ La recherche s'effectue avec @Allocine.find_movie@ et renvoie un Hash de l'ID al
 
 <pre>
   >> Allocine.find_movie('Plan 9 From Outer Space')
-  => {"13031"=>"Plan 9", "136668"=>"Plan 9 from Outer Space"}
+  => [["136668", "Plan 9 from Outer Space"], ["13031", "Plan 9 from Outer Space"]]
 </pre>
 
 h4. Recherche d'une série
 
 <pre>
   >> Allocine.find_show('xfiles')
-  => {"182"=>"X-Files : Aux frontières du réel"}
+  => {"182"=>"X-Files : Aux frontières du réel", "223"=>"Lost"}
 </pre>
 
 h3. Récupération des informations d'un film/série
@@ -45,7 +45,7 @@ h4. Film
 
 <pre>
   >> movie = Allocine::Movie.new('13031')
-  => #<AllocineMovie:0x11fb250 ....>
+  => #<AllocineMovie:0x1016b0e98 ....>
   >> movie.title
   => "Plan 9"
   >> movie.original_title
@@ -59,14 +59,22 @@ h4. Film
   >> movie.genres
   => "Science fiction, Epouvante-horreur, Fantastique"
   >> movie.nat
-  => "am\303\251ricain"
+  => "américain"
   >> movie.image
+  => "http://images.allocine.fr/r_160_214/b_1_cfd7e1/medias/nmedia/18/71/65/84/19141370.jpg"
+  >> movie.duree
+  => 1h19
+  >> movie.trailer
   => ""
   >> movie.synopsis
   => "Des extraterrestres appliquent le plan 9 destine a manoeuvrer les terriens. Plan diabolique, il consiste a la resurrection des morts en introduisant des electrodes a longue portee stimulant la glande pineale de cadavres recemment enterres."
 </pre>
 
+@trailer@ est le numéro de la vidéo chez Allocine. Pour avoir le Flash de la bande annonce, ce numéro est a concaténer avec : http://www.allocine.fr/blogvision/_Trailer ID_
+
 h4. Série
+
+@En cours de modification, les regex actuelles ne remontent que le titre.@
 
 <pre>
   >> show = Allocine::Show.new('182')

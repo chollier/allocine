@@ -1,16 +1,17 @@
 Gem::Specification.new do |s|
   s.name     = "allocine"
-  s.version  = "0.3.0"
-  s.date     = "2009-02-08"
+  s.version  = "0.4.0"
+  s.date     = "2009-11-18"
   s.summary  = "Allocine.fr parser"
-  s.email    = "jordan@lifeisdead.net"
-  s.homepage = "http://github.com/webs/allocine"
-  s.description = "Allocine.fr parser"
+  s.email    = "florian@e-lam.net"
+  s.homepage = "http://github.com/Florian95/allocine"
+  s.description = "Allocine.fr Ruby Wrapper"
   s.has_rdoc = false
-  s.authors  = ["Jordan Bracco", "Sunny Ripert"]
+  s.authors  = ["Jordan Bracco", "Sunny Ripert", "Florian LAMACHE"]
   s.files    = ["README.textile", 
     "allocine.gemspec", 
     "lib/allocine.rb",
+    "lib/allocine/tools.rb",
     "lib/allocine/allocine.rb",
     "lib/allocine/movie.rb", 
     "lib/allocine/show.rb"
