@@ -4,7 +4,7 @@ class Show
   
   def self.find(search)
     search.gsub!(' ', '+')
-    str = Allocine::Web.download(SHOW_SEARCH_URL % search)
+    str = Allocine::Web.new(SHOW_SEARCH_URL % search).data
     shows = {}
     while str =~ /<a href='\/series\/ficheserie_gen_cserie=(\d+).html'>(.*?)<\/a>/mi
       id, name = $1, $2
@@ -40,7 +40,7 @@ class Show
       :synopsis => '<h5><span style=\'font-weight:bold\'>Synopsis</span>&nbsp;&nbsp;&nbsp;.*?<br />(.*?)</h5>',
       :image => '<td><div id=\'divM\' .*?><img src=\'(.*?)\' style=\'border:1px solid black;.*?>',
     }
-    data = Allocine::Web.download(SHOW_DETAIL_URL % id).gsub(/\r|\n|\t/,"")
+    data = Allocine::Web.new(SHOW_DETAIL_URL % id).data.gsub(/\r|\n|\t/,"")
     regexps.each do |reg|
       print "#{reg[0]}: " if debug
       r = data.scan Regexp.new(reg[1], Regexp::MULTILINE)

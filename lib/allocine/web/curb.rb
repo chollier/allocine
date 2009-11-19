@@ -1,6 +1,6 @@
 module Allocine
-  class Web
-    def self.download(urls)
+  module WebCurb
+    def download(urls)
       url_queue = [*urls]
       multi = Curl::Multi.new
       responses = {}
@@ -19,8 +19,8 @@ module Allocine
       multi.perform
       urls.is_a?(String) ? responses.values.first : responses
     end
-  
-    def self.decode_content(c)
+
+    def decode_content(c)
       if c.header_str.match(/Content-Encoding: gzip/)
         begin
           gz =  Zlib::GzipReader.new(StringIO.new(c.body_str))
@@ -37,6 +37,6 @@ module Allocine
       end
       xml
     end
-    
+
   end
 end

@@ -12,7 +12,7 @@ class Movie
       gsub(' ', '+').
       gsub('2nd', '2').
       to_s
-    data = Allocine::Web.download(MOVIE_SEARCH_URL % search).gsub(/\r|\n|\t|\s{2,}/,"")
+    data = Allocine::Web.new(MOVIE_SEARCH_URL % search).data.gsub(/\r|\n|\t|\s{2,}/,"")
     movies = Array.new
     while data =~ /<a href='\/film\/fichefilm_gen_cfilm=(\d+).html'><imgsrc='.*?'alt='(.*?)' \/><\/a>/i
       id, name = $1, $2
@@ -26,7 +26,7 @@ class Movie
   end
   
   def self.searchGoogle(search, movies)
-    data = Allocine::Web.download("http://www.google.fr/search?hl=fr&q=site:allocine.fr+#{search}") #.gsub(/\r|\n|\t/,"")
+    data = Allocine::Web.new("http://www.google.fr/search?hl=fr&q=site:allocine.fr+#{search}").data #.gsub(/\r|\n|\t/,"")
     matches = Array.new
     data.scan(/fichefilm_gen_cfilm=([0-9]*).html/) do |m| 
       matches << [m.first, "#{search} - Found by Google"] unless movies.include? m.first
@@ -55,7 +55,7 @@ class Movie
       :press_rate => '<p class="withstars"><a href=\'/film/revuedepresse_gen_cfilm=[0-9]*?.html\'><img .*? /></a><span class="moreinfo">\((.*?)\)</span></p></div>',
       :trailer => "<li class=\"\"><a href=\"\/video\/player_gen_cmedia=(.*?)&cfilm=#{id}\.html\">Bandes-annonces<\/a><\/li>"
     }
-    data = Allocine::Web.download(MOVIE_DETAIL_URL % id).gsub(/\r|\n|\t/,"")
+    data = Allocine::Web.new(MOVIE_DETAIL_URL % id).data.gsub(/\r|\n|\t/,"")
     regexps.each do |reg|
       print "#{reg[0]}: " if debug
       r = data.scan Regexp.new(reg[1], Regexp::MULTILINE)
