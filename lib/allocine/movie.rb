@@ -1,6 +1,7 @@
 module Allocine
 class Movie
-  attr_accessor :title, :directors, :trailer, :press_rate, :nat, :genres, :out_date, :duree, :production_date, :original_title, :actors, :synopsis, :image, :interdit
+  attr_accessor :id, :title, :directors, :trailer, :press_rate, :nat, :genres, :out_date, :duree, :production_date, :original_title, :actors, :synopsis, :image, :interdit
+  
   
   def self.find(search)
     search = ActiveSupport::Multibyte.proxy_class.new(search.to_s).mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n,'').downcase.to_s.
@@ -39,7 +40,23 @@ class Movie
     new(results.first)
   end
   
+  def press_reviews
+    data = Allocine::Web.new(MOVIE_PRESS_URL % self.id).data.gsub(/\r|\n|\t/,"")
+    reviews = Array.new
+    
+    while data =~ /<div class="rubric"><div class="titlebar vmargin20t novmarginb"><a id="pressreview(.*?)" class="anchor"><\/a>(.*?)<\/p><\/div><div class="rubric">/i
+      pressreviewid, content = $1, $2
+      data.gsub!(/<a id="pressreview#{pressreviewid}" class="anchor">/, "")
+      content =~ /<h2><a href="\/critique\/fichepresse_gen_cpresse=(.*?).html">(.*?)<\/a><\/h2><span><img.*?stareval n([0-9]{1}?)0 on4.*?\/><\/span><\/div><p class="lighten">(.*?)<\/p><p>(.*?)<\/p>/
+      # 1 : ID, 2 : Journal, 3 : Note, 4 : Auteur, 5 : Critique
+      reviews << [$1, $2, $3, $4, $5]  unless $2.nil? || $3.nil?
+    end
+    
+    reviews
+  end
+  
   def initialize(id, debug=false)
+    self.id = id
     regexps = {
       :title => '<div class="titlebar"><h1>(.*?)<\/h1>',
       :directors => 'Réalisé par <span .*?><a .*?>(.*?)<\/a><\/span>',

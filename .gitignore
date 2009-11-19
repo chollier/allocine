@@ -21,3 +21,6 @@ doc
 .yardoc
 
 ## PROJECT::SPECIFIC
+
+## Personnal
+.rake_tasks
