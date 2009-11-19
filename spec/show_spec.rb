@@ -1,3 +1,5 @@
+require 'helper'
+
 describe "Allocine Show (Enterprise - 109)" do
   
   before(:each) { @show = Allocine::Show.new('109') }

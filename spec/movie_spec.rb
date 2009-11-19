@@ -1,3 +1,5 @@
+require 'helper'
+
 describe "Allocine Movie (Star Trek - 4854)" do
   
   before(:each) { @movie = Allocine::Movie.new('4854') }

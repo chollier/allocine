@@ -1,3 +1,9 @@
-require "rubygems"
-require File.dirname(__FILE__) + '/../lib/allocine.rb'
-require "spec"
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'allocine'
+require 'spec'
+require 'spec/autorun'
+
+Spec::Runner.configure do |config|
+
+end

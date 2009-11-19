@@ -1,3 +1,5 @@
+require 'helper'
+
 describe "Allocine" do
   it "find movie" do
     Allocine.find_movie('Plan 9').size.should == 21
