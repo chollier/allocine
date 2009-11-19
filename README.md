@@ -47,7 +47,7 @@ Une petite application Sinatra est fournie. Pour la démarrer,
 - [Issues][4]
 - [Try it live!][5]
 
-Mis a disposition sous licence MIT. (c) 2008 Jordan Bracco[7], Florian Lamache[8], Sunny Ripert[9].
+Mis a disposition sous licence MIT. (c) 2008 [Jordan Bracco][7], [Florian Lamache][8], [Sunny Ripert][9].
 
 [1]: http://webs.github.com/allocine
 [2]: http://github.com/webs/allocine
