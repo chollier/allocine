@@ -1,9 +1,6 @@
 $:.unshift File.dirname(__FILE__)
 
-begin
-  require 'activesupport'
-rescue LoadError
-end
+require 'activesupport'
 
 %w{allocine/web allocine/movie allocine/show}.each do |lib|
   require lib
