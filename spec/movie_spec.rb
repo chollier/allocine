@@ -21,7 +21,7 @@ describe "Allocine Movie (Star Trek - 4854)" do
   end
   
   it 'should have a picture' do
-    @movie.image.should == "http://images.allocine.fr/r_160_214/commons/emptymedia/AffichetteAllocine.gif"
+    @movie.image.should_not be nil
   end
   
   it 'should have a genre' do
@@ -33,7 +33,7 @@ describe "Allocine Movie (Star Trek - 4854)" do
   end
   
   it 'should have a duration' do
-    @movie.duree.should == "1h52 min"
+    @movie.duree.should == "1h52"
   end
   
   it 'should have actors' do

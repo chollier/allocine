@@ -2,7 +2,7 @@ require 'helper'
 
 describe "Allocine" do
   it "find movie" do
-    Allocine.find_movie('Plan 9').size.should == 21
+    Allocine.find_movie('Plan 9').size.should == 2
   end
   
   it "find show" do
