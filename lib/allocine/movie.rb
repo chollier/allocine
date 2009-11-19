@@ -47,8 +47,9 @@ class Movie
     while data =~ /<div class="rubric"><div class="titlebar vmargin20t novmarginb"><a id="pressreview(.*?)" class="anchor"><\/a>(.*?)<\/p><\/div><div class="rubric">/i
       pressreviewid, content = $1, $2
       data.gsub!(/<a id="pressreview#{pressreviewid}" class="anchor">/, "")
-      content =~ /<h2><a href="\/critique\/fichepresse_gen_cpresse=(.*?).html">(.*?)<\/a><\/h2><span><img.*?\/><\/span><\/div><p class="lighten">(.*?)<\/p><p>(.*?)<\/p>/
-      reviews << [$1, $2, $3, $4]  
+      content =~ /<h2><a href="\/critique\/fichepresse_gen_cpresse=(.*?).html">(.*?)<\/a><\/h2><span><img.*?stareval n([0-9]{1}?)0 on4.*?\/><\/span><\/div><p class="lighten">(.*?)<\/p><p>(.*?)<\/p>/
+      # 1 : ID, 2 : Journal, 3 : Note, 4 : Auteur, 5 : Critique
+      reviews << [$1, $2, $3, $4, $5]  unless $2.nil? || $3.nil?
     end
     
     reviews
