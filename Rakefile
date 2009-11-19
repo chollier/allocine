@@ -8,10 +8,10 @@ begin
     gem.summary = %Q{Parser for Allocine.fr}
     gem.description = %Q{Get data about movies and shows on allocine.fr}
     gem.email = "jordan@bracco.name"
-    gem.homepage = "http://github.com/webs/jeweler"
+    gem.homepage = "http://webs.github.com/allocine"
     gem.authors = ["Jordan Bracco", "Florian Lamache", "Sunny Ripert"]
     gem.rubyforge_project = "allocine"
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "rspec", ">= 0"
     gem.add_dependency("activesupport", ["> 0.0.0"])
   end
   Jeweler::GemcutterTasks.new
