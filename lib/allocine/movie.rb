@@ -64,7 +64,7 @@ class Movie
       :genres => 'Genre : (.*?)<br\/>',
       :out_date => 'Date de sortie cinéma : <span .*?><a .*?>(.*?)<\/a><\/span>',
       :duree => 'Durée :(.*?) min',
-      :production_date => 'Année de production : <a .*?>(.*?)<\/a><br \/>',
+      :production_date => 'Année de production.*?<a .*?>(.*?)<\/a>.*?<br \/>',
       :original_title => 'Titre original : <span .*?><em>(.*?)<\/em><\/span>',
       :actors => 'Avec (.*?), <a class=',
       :synopsis => '<p><span class="bold">Synopsis : </span>(.*?)</p>',
