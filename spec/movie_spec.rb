@@ -2,7 +2,7 @@ require 'helper'
 
 describe "Allocine Movie (Sixième Sens - 22092)" do
   
-  before(:each) { @movie = Allocine::Movie.new('22092') }
+  before(:all) { @movie = Allocine::Movie.new('22092') }
   
   it 'should have a title' do
     @movie.title.should == "Sixième Sens"

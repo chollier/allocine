@@ -2,7 +2,7 @@ require 'helper'
 
 describe "Allocine Show (Enterprise - 109)" do
   
-  before(:each) { @show = Allocine::Show.new('109') }
+  before(:all) { @show = Allocine::Show.new('109') }
   
   it 'should have a title' do
     @show.title.should == "Enterprise"
