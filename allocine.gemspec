@@ -5,13 +5,15 @@
 
 Gem::Specification.new do |s|
   s.name = %q{allocine}
-  s.version = "0.4.0"
+  s.version = "0.4.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jordan Bracco", "Florian Lamache", "Sunny Ripert"]
-  s.date = %q{2009-11-19}
+  s.date = %q{2010-02-14}
+  s.default_executable = %q{allocine-web}
   s.description = %q{Get data about movies and shows on allocine.fr}
   s.email = %q{jordan@bracco.name}
+  s.executables = ["allocine-web"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.md"
@@ -24,9 +26,18 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "allocine.gemspec",
+     "bin/allocine-web",
      "lib/allocine.rb",
      "lib/allocine/movie.rb",
      "lib/allocine/show.rb",
+     "lib/allocine/sinatra.rb",
+     "lib/allocine/sinatra/index.haml",
+     "lib/allocine/sinatra/layout.haml",
+     "lib/allocine/sinatra/movie.haml",
+     "lib/allocine/sinatra/results.haml",
+     "lib/allocine/sinatra/search.haml",
+     "lib/allocine/sinatra/show.haml",
+     "lib/allocine/sinatra/stylesheet.sass",
      "lib/allocine/web.rb",
      "lib/allocine/web/curb.rb",
      "lib/allocine/web/open_uri.rb",
@@ -35,7 +46,7 @@ Gem::Specification.new do |s|
      "spec/movie_spec.rb",
      "spec/show_spec.rb"
   ]
-  s.homepage = %q{http://github.com/webs/allocine}
+  s.homepage = %q{http://code.webs.ly/allocine}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{allocine}
@@ -53,15 +64,21 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_runtime_dependency(%q<activesupport>, ["> 0.0.0"])
+      s.add_runtime_dependency(%q<vegas>, ["> 0.0.0"])
+      s.add_runtime_dependency(%q<sinatra>, ["> 0.0.0"])
     else
-      s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
+      s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<activesupport>, ["> 0.0.0"])
+      s.add_dependency(%q<vegas>, ["> 0.0.0"])
+      s.add_dependency(%q<sinatra>, ["> 0.0.0"])
     end
   else
-    s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
+    s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<activesupport>, ["> 0.0.0"])
+    s.add_dependency(%q<vegas>, ["> 0.0.0"])
+    s.add_dependency(%q<sinatra>, ["> 0.0.0"])
   end
 end
 
