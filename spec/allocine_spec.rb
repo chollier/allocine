@@ -6,7 +6,7 @@ describe "Allocine" do
   end
   
   it "find show" do
-    Allocine.find_show('XFiles').should == {"182"=>"X-Files : Aux fronti\303\250res du r\303\251el", "223"=>"Lost"}
+    Allocine.find_show('XFiles').should == {"182"=>"X-Files : Aux frontières du réel", "3004"=>"Dexter", "62"=>"Smallville", "223"=>"Lost, les disparus"}#{"182"=>"X-Files : Aux fronti\303\250res du r\303\251el", "223"=>"Lost"}
   end
   
   it "lucky movie" do

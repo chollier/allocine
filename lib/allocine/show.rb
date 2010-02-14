@@ -30,15 +30,14 @@ class Show
     #TODO : New Regex for new version.    
     regexps = {
       :title => '<title>(.*?)<\/title>',
-      :created_by => '<h4>Série créée par <a .*?>(.*?)</a>', 
-      :producters => '<h4>Producteurs : (.*?)</h4>', 
-      :nat => '<span style=\'font-weight:bold\'>Nationalité</span> : (.*?)</h5>', 
-      :genres => '<span style=\'font-weight:bold\'>Genre</span> : (.*?)&nbsp;&nbsp;', 
-      :duree => '<span style=\'font-weight:bold\'>Format</span> : (.+?).&nbsp;', 
-      :original_title => '<h4><b>Titre original : </b></h4><h4 style="color:#D20000"><b>(.*?)</b></h4>',
-      :actors => '<h4>Avec : (.*?)&nbsp;&nbsp;', 
-      :synopsis => '<h5><span style=\'font-weight:bold\'>Synopsis</span>&nbsp;&nbsp;&nbsp;.*?<br />(.*?)</h5>',
-      :image => '<td><div id=\'divM\' .*?><img src=\'(.*?)\' style=\'border:1px solid black;.*?>',
+      :created_by => 'Créée par (.*?)</span>', 
+      :nat => 'Série.*?<a href=\'/film/tous/pays-[0-9]+/\'>(.*?)<\/a>\.', 
+      :genres => 'Genre.*<a href=\'/series/toutes/genre-[0-9]+/\'>(.*?)<\/a>.',
+      :duree => 'Format :(.*?)</p>',
+      :original_title => 'Titre original : <span .*?><em>(.*?)<\/em><\/span>',
+      :actors => 'Avec : (.*?)&nbsp;&nbsp;',
+      :synopsis => '<p class="">.*?<span class="bold">Synopsis :</span>(.*?)</p>',
+      :image => '<div class="poster"><em class="imagecontainer"><a .*?><img src=\'(.*?)\'alt=".*?"title=".*?"\/><img .*?><\/a><\/em>',
     }
     data = Allocine::Web.new(SHOW_DETAIL_URL % id).data.gsub(/\r|\n|\t/,"")
     regexps.each do |reg|
