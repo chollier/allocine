@@ -1,0 +1,16 @@
+!!! strict
+%html
+  %head
+    %title= @title
+    %link{:rel => 'stylesheet', :href => '/main.css', :type => 'text/css'}
+    %script{:type => 'text/javascript', :src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js'}
+    = @script if @script
+  %body
+    #container
+      - unless @hide_headers
+        #head
+          %h1= @title
+      #body
+        = yield
+      #footer
+        %a{:href => 'http://code.webs.ly/allocine'} allocine

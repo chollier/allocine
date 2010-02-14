@@ -1,0 +1,38 @@
+- if @movie.image
+  %span.picture
+    %img{:src => @movie.image}
+
+- if @movie.directors
+  %strong Producteurs:
+  = @movie.directors
+  %br
+- if @movie.nat
+  Film
+  = @movie.nat
+  %br
+- if @movie.genres
+  %strong Genres:
+  = @movie.genres
+  %br
+- if @movie.out_date
+  %strong Date de sortie
+  = @movie.out_date
+  %br
+- if @movie.duree
+  %strong Durée
+  = @movie.duree
+  %br
+- if @movie.production_date
+  %strong Date de production
+  = @movie.production_date
+  %br
+- if @movie.original_title
+  %strong Titre original
+  = @movie.original_title
+  %br
+- if @movie.actors
+  %strong Acteurs
+  = @movie.actors
+  %br
+- if @movie.synopsis
+  %p= @movie.synopsis

@@ -1,0 +1,4 @@
+%ul
+  - @results.each do |result|
+    %li
+      %a{:href=>"/#{@type}/#{result[0]}"}= result[1]

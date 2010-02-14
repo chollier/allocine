@@ -1,0 +1,35 @@
+- if @show.image
+  %span.picture
+    %img{:src => @show.image}
+
+- if @show.created_by
+  %strong Créée par
+  = @show.created_by
+  %br
+- if @show.producters
+  %strong Producteurs
+  = @show.producters
+  %br
+- if @show.nat
+  %strong Nationalité
+  = @show.nat
+  %br
+- if @show.genres
+  %strong Genres
+  = @show.genres
+  %br
+- if @show.duree
+  %strong Durée d'un épîsode
+  = @show.duree
+  %br
+- if @show.original_title
+  %strong Titre Original
+  = @show.original_title
+  %br
+- if @show.actors
+  %strong Acteurs
+  = @show.actors
+  %br
+- if @show.synopsis
+  %br
+  = @show.synopsis
